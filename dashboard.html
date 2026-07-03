@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BugBird // Light Console Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-brand">
+            <div class="logo-icon">B⚡B</div>
+            <div>
+                <h1 class="logo-text">BugBird</h1>
+                <p class="logo-subtext">Enterprise Analytics Console</p>
+            </div>
+        </div>
+        <button onclick="toggleModal(true)" class="btn btn-primary">+ New Defect</button>
+    </header>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <label class="sidebar-label">Workspaces</label>
+                <div class="workspace-card">
+                    <span>All Clusters</span>
+                    <span class="badge badge-neutral" id="sidebarCount">0</span>
+                </div>
+            </div>
+            <div class="sidebar-section">
+                <label class="sidebar-label">Scope Filters</label>
+                <select id="filterSeverity" onchange="renderDashboard()" class="form-control">
+                    <option value="All">All Severities</option>
+                    <option value="Critical">🔴 Critical Only</option>
+                    <option value="High">🟠 High Severity</option>
+                    <option value="Medium">🔵 Medium Priority</option>
+                    <option value="Low">⚪ Low Priority</option>
+                </select>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section class="stats-grid" id="statsGrid"></section>
+
+            <section class="matrix-panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Active Issue Matrix</h3>
+                    <div class="tab-group">
+                        <button onclick="setStatusTab('All')" id="tab-All" class="tab-btn active">All Items</button>
+                        <button onclick="setStatusTab('Open')" id="tab-Open" class="tab-btn">Open</button>
+                        <button onclick="setStatusTab('In Progress')" id="tab-In-Progress" class="tab-btn">In Progress</button>
+                        <button onclick="setStatusTab('Resolved')" id="tab-Resolved" class="tab-btn">Resolved</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Defect Information</th>
+                                <th>Severity Tier</th>
+                                <th>Milestone</th>
+                                <th>Lead Developer</th>
+                                <th class="text-right">Workflow State</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="formModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Log Engine Exception</h3>
+                <button onclick="toggleModal(false)" class="close-btn">&times;</button>
+            </div>
+            <form id="bugForm" onsubmit="handleFormSubmit(event)" class="modal-form">
+                <div class="form-group">
+                    <label class="form-label">Issue Headline</label>
+                    <input type="text" name="title" required placeholder="Short technical summary" class="form-control">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Severity</label>
+                        <select name="severity" class="form-control">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Target Sprint</label>
+                        <input type="text" name="sprint" placeholder="Sprint 45" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Owner Assignment</label>
+                    <select name="assigned_to" id="userDropdown" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Detailed Log Notes</label>
+                    <textarea name="description" rows="3" class="form-control" placeholder="Environmental variables logs..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="toggleModal(false)" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
